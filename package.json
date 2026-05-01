@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "vp run --filter @flagship-example/* dev",
+    "cf-typegen": "wrangler types --env-interface Bindings ./apps/backend/worker-configuration.d.ts",
     "prepare": "vp config"
   },
   "devDependencies": {
