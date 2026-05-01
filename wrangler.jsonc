@@ -3,4 +3,11 @@
   "name": "flagship-example",
   "compatibility_date": "2026-04-28",
   "main": "./apps/backend/src/index.ts",
+  "flagship": [
+    {
+      "app_id": "aaf1fab0-bb42-4d02-b189-2b2a151515cf",
+      "binding": "FLAGS",
+      "remote": true,
+    },
+  ],
 }
