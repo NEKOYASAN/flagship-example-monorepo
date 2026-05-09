@@ -8,52 +8,96 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as UserUserIdRouteImport } from "./routes/user/$userId";
+import { Route as UserUserIdAboutRouteImport } from "./routes/user/$userId/about";
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
+const UserUserIdRoute = UserUserIdRouteImport.update({
+  id: "/user/$userId",
+  path: "/user/$userId",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const UserUserIdAboutRoute = UserUserIdAboutRouteImport.update({
+  id: "/about",
+  path: "/about",
+  getParentRoute: () => UserUserIdRoute,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  "/": typeof IndexRoute;
+  "/user/$userId": typeof UserUserIdRouteWithChildren;
+  "/user/$userId/about": typeof UserUserIdAboutRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  "/": typeof IndexRoute;
+  "/user/$userId": typeof UserUserIdRouteWithChildren;
+  "/user/$userId/about": typeof UserUserIdAboutRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/user/$userId": typeof UserUserIdRouteWithChildren;
+  "/user/$userId/about": typeof UserUserIdAboutRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
-  fileRoutesById: FileRoutesById
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: "/" | "/user/$userId" | "/user/$userId/about";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "/user/$userId" | "/user/$userId/about";
+  id: "__root__" | "/" | "/user/$userId" | "/user/$userId/about";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  IndexRoute: typeof IndexRoute;
+  UserUserIdRoute: typeof UserUserIdRouteWithChildren;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/user/$userId": {
+      id: "/user/$userId";
+      path: "/user/$userId";
+      fullPath: "/user/$userId";
+      preLoaderRoute: typeof UserUserIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/user/$userId/about": {
+      id: "/user/$userId/about";
+      path: "/about";
+      fullPath: "/user/$userId/about";
+      preLoaderRoute: typeof UserUserIdAboutRouteImport;
+      parentRoute: typeof UserUserIdRoute;
+    };
   }
 }
 
+interface UserUserIdRouteChildren {
+  UserUserIdAboutRoute: typeof UserUserIdAboutRoute;
+}
+
+const UserUserIdRouteChildren: UserUserIdRouteChildren = {
+  UserUserIdAboutRoute: UserUserIdAboutRoute,
+};
+
+const UserUserIdRouteWithChildren = UserUserIdRoute._addFileChildren(UserUserIdRouteChildren);
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-}
+  UserUserIdRoute: UserUserIdRouteWithChildren,
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
